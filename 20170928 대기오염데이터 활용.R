@@ -2,20 +2,20 @@ library(rvest)
 library(httr)
 
 
-service_key = "rFHAKEE8jRBuUfyEHcNhdRDFiJfE5H7A8Y5PIfnhtgrAAHF1DUxm6UX%2BFIUf95ZAFNzchnXqGBsbZ8D%2BwNe6Gg%3D%3D"
-#¹ß±ŞµÈ ¼­ºñ½ºÅ°À» service_key º¯¼ö¿¡ ÇÒ´ç
+service_key = serviceKey
+#ë°œê¸‰ëœ ì„œë¹„ìŠ¤í‚¤ì„ service_key ë³€ìˆ˜ì— í• ë‹¹
 
 
 url = paste0("http://openapi.airkorea.or.kr/openapi/services/rest/",
              "ArpltnInforInqireSvc/getCtprvnMesureSidoLIst?",
-             "sidoName=¼­¿ï",
+             "sidoName=ì„œìš¸",
              "&searchCondition=DAILY",
              "&pageNo=",1,
              "&numOfRows=",25,
              "&ServiceKey=",service_key)
 url_get = GET(url)
-#URLÀ» GET¹æ½ÄÀ¸·Î È£ÃâÇÏ¿© µ¥ÀÌÅÍ ¿äÃ»
-#url ¸¸µé±â
+#URLì„ GETë°©ì‹ìœ¼ë¡œ í˜¸ì¶œí•˜ì—¬ ë°ì´í„° ìš”ì²­
+#url ë§Œë“¤ê¸°
 
 
 url_xml = read_xml(url_get)
@@ -23,7 +23,7 @@ url_xml
 
 
 item_list = xml_nodes(url_xml, 'items item')
-#XML Çü½ÄÀ¸·Î ÀúÀåµÈ url_xml º¯¼ö¿¡¼­ ¾Æ·¡ÀÇ ³ëµå·Î ÀÌµ¿ÇÏ¿© ÇÊ¿äÇÑ µ¥ÀÌÅÍ ¼öÁı
+#XML í˜•ì‹ìœ¼ë¡œ ì €ì¥ëœ url_xml ë³€ìˆ˜ì—ì„œ ì•„ë˜ì˜ ë…¸ë“œë¡œ ì´ë™í•˜ì—¬ í•„ìš”í•œ ë°ì´í„° ìˆ˜ì§‘
 item_list[[1]]
 
 tmp_item = xml_children(item_list[[1]])
@@ -46,13 +46,13 @@ head(item_dat)
 
 View(item_dat)
 
-#µ¥ÀÌÅÍ ¸ğÀ¸±â
+#ë°ì´í„° ëª¨ìœ¼ê¸°
 air_data = NULL
 while(1)
 {
   url = paste0("http://openapi.airkorea.or.kr/openapi/services/rest/",
                "ArpltnInforInqireSvc/getCtprvnMesureSidoLIst?",
-               "sidoName=¼­¿ï",
+               "sidoName=ì„œìš¸",
                "&searchCondition=DAILY",
                "&pageNo=",1,
                "&numOfRows=",600,
@@ -76,7 +76,7 @@ ui = fluidPage(
   titlePanel("Welcome shiny!"),
   sidebarLayout(
     sidebarPanel(
-      textInput("input_text", "ÅØ½ºÆ®¸¦ ÀÔ·ÂÇÏ¼¼¿ä.")
+      textInput("input_text", "í…ìŠ¤íŠ¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”.")
     ),
     mainPanel(
       textOutput("output_text")
@@ -105,7 +105,7 @@ shinyApp(ui = ui, server= server)
 
 url = paste0("http://openapi.airkorea.or.kr/openapi/services/rest/",
              "ArpltnInforInqireSvc/getCtprvnMesureSidoLIst?",
-             "sidoName=¼­¿ï",
+             "sidoName=ì„œìš¸",
              "&searchCondition=DAILY",
              "&pageNo=",1,
              "&numOfRows=",600,
@@ -123,7 +123,7 @@ colnames(item_dat) = colnames_dat
 
 library(ggmap)
 uniq_region = unique(item_dat$cityName)
-geo_dat = geocode(paste("¼­¿ïÆ¯º°½Ã", uniq_region))
+geo_dat = geocode(paste("ì„œìš¸íŠ¹ë³„ì‹œ", uniq_region))
 geo_dat = cbind(cityName = uniq_region, geo_dat)
 head(geo_dat)
 
@@ -131,7 +131,7 @@ item_dat = merge(item_dat, geo_dat, by = "cityName")
 head(item_dat)
 write.csv(item_dat, 'air_quality.csv', row.names = F)
 
-dat = read.csv('air_quality.csv') #ÀĞ¾î¿Í¾ß ÇÔ~
+dat = read.csv('air_quality.csv') #ì½ì–´ì™€ì•¼ í•¨~
 View(dat)
 
 ui = fluidPage(
@@ -156,6 +156,6 @@ server = function(input, output)
   return(NULL)
 }
 shinyApp(ui = ui, server = server)
-# ½½¶óÀÌµå 49±îÁö ¸¸µé¾úÀ½
+# ìŠ¬ë¼ì´ë“œ 49ê¹Œì§€ ë§Œë“¤ì—ˆìŒ
 
 
